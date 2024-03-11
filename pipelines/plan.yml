@@ -1,0 +1,39 @@
+variables:
+  - group: terraform-base
+  - group: devops-base
+  - group: devops-non-prod
+  - group: devops-dev
+
+pool:
+  vmImage: ubuntu-22.04
+
+trigger:
+  batch: true
+  branches:
+    include:
+      - master
+      - main
+  paths:
+    exclude: []
+
+stages:
+  - template: ./templates/plan.yml
+    parameters:
+      terraform_version:  $(terraform_version)
+      terraform_path:     $(terraform_path)
+      sa:                 $(sa)
+      container:          $(container)
+      service_connection: $(service_connection)
+      environment:        $(environment)
+      project:            $(project)
+      subscription_id:    $(subscription_id)
+
+  # - template: ./templates/apply.yml
+  #   parameters:
+  #     terraform_version:  $(terraform_version)
+  #     terraform_path:     $(terraform_path)
+  #     sa:                 $(sa)
+  #     container:          $(container)
+  #     service_connection: $(service_connection)
+  #     environment:        $(environment)
+  #     project:            $(project)
