@@ -9,3 +9,14 @@ output "tags" {
 output location {
   value = "australiasoutheast"
 }
+
+output "aks_control_ports" {
+  value = [
+    "6443",  # API server
+    "2379",  # etcd
+    "2380",  # etcd
+    "10250", # kubelet
+    "10259", # scheduler
+    "10257", # controller
+  ]
+}
