@@ -27,12 +27,10 @@ stages:
       subscription_id:    $(subscription_id)
       id_file:            id_rsa.pub
 
-  # - template: ./templates/apply.yml
-  #   parameters:
-  #     terraform_version:  $(terraform_version)
-  #     terraform_path:     $(terraform_path)
-  #     sa:                 $(sa)
-  #     container:          $(container)
-  #     service_connection: $(service_connection)
-  #     environment:        $(environment)
-  #     project:            $(project)
+  - template: ./templates/apply.yml
+    parameters:
+      sa:                 $(sa)
+      container:          $(container)
+      service_connection: $(service_connection)
+      environment:        $(environment)
+      project:            $(project)
