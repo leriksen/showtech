@@ -80,6 +80,20 @@ resource "azurerm_network_security_rule" "ssh" {
   network_security_group_name = azurerm_network_security_group.aks_control_plane.name
 }
 
+resource "azurerm_network_security_rule" "test" {
+  name                        = "test_in"
+  priority                    = 2000
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "9999"
+  source_address_prefix       = "VirtualNetwork"
+  destination_address_prefix  = "VirtualNetwork"
+  resource_group_name         = azurerm_resource_group.showtech.name
+  network_security_group_name = azurerm_network_security_group.aks_control_plane.name
+}
+
 resource "azurerm_subnet_network_security_group_association" "public_aks_control" {
   network_security_group_id = azurerm_network_security_group.aks_control_plane.id
   subnet_id                 = azurerm_subnet.public.id
