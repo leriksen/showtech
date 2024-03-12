@@ -1,0 +1,61 @@
+variables:
+  - group: terraform-base
+  - group: devops-base
+  - group: devops-non-prod
+  - group: devops-dev
+
+pool:
+  vmImage: ubuntu-22.04
+
+trigger:
+  batch: true
+  branches:
+    include:
+      - master
+      - main
+  paths:
+    exclude: []
+
+stages:
+  - stage: chef
+    displayName: Chef Apply
+    jobs:
+      - deployment: chef_apply
+        displayName: Chef Apply
+        workspace:
+          clean: all
+        environment: ${{ parameters.environment }}
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+
+                - task: DownloadSecureFile@1
+                  name: idfile
+                  inputs:
+                    secureFile: id_rsa
+
+                - task: Bash@3
+                  displayName: knife
+                  inputs:
+                    targetType: inline
+                    script: |
+                      export fq=$(az network public-ip show -g showtech -n public | jq -r '.ipAddress')
+                      knife bootstrap adminuser@$fq --node-name aks --ssh-identity-file $(idfile.secureFilePath) --yes --sudo
+
+                - task: Bash@3
+                  displayName: rsync
+                  inputs:
+                    targetType: inline
+                    script: |
+                      export fq=$(az network public-ip show -g showtech -n public | jq -r '.ipAddress')
+                      rsync -zavuh -e "ssh -i $(idfile.secureFilePath)" ./cookbooks adminuser@$fq:~
+
+                - task: Bash@3
+                  displayName: chef-client
+                  inputs:
+                    targetType: inline
+                    script: |
+                      export fq=$(az network public-ip show -g showtech -n public | jq -r '.ipAddress')
+                      ssh adminuser@$fq -i $(idfile.secureFilePath) "sudo chef-client -zr 'recipe[aks]'"
