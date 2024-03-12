@@ -40,6 +40,8 @@ stages:
             inputs:
               secureFile: ${{ parameters.id_file }}
 
+          - script: echo $(idfile.secureFilePath)
+
           - task: AzureCLI@2
             displayName: terraform plan
             name: plan # needed for result later
