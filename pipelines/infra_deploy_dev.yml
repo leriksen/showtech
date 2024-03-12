@@ -34,3 +34,4 @@ stages:
       service_connection: $(service_connection)
       environment:        $(environment)
       project:            $(project)
+      subscription_id:    $(subscription_id)

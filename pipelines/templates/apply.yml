@@ -4,6 +4,7 @@ parameters:
   - name: environment
   - name: project
   - name: service_connection
+  - name: subscription_id
 
 stages:
   - stage: terraform_apply
@@ -38,6 +39,7 @@ stages:
                       -backend-config="key=${{ parameters.project }}-${{ parameters.environment }}.tfstate"
                   env:
                     TF_IN_AUTOMATION: true
+                    ARM_SUBSCRIPTION_ID: ${{ parameters.subscription_id }}
                     ARM_USE_AZUREAD: true
 
                 - task: AzureCLI@2
