@@ -2,6 +2,10 @@ parameters:
   - name: environment
     type: string
     default: dev
+  - name: service_connection
+    type: string
+    default: sc_azure
+
 variables:
   - group: terraform-base
   - group: devops-base
@@ -45,26 +49,33 @@ stages:
                   inputs:
                     secureFile: id_rsa
 
+                - task: AzureCLI@2
+                  displayName: get ip
+                  name: ip
+                  inputs:
+                    azureSubscription: ${{ parameters.service_connection }}
+                    scriptType: inline
+                    script: |
+                      export fq=$(az network public-ip show -g showtech -n public | jq -r '.ipAddress')
+                      echo "##vso[task.setvariable variable=fq;isOutput=true]${fq}"
+
                 - task: Bash@3
                   displayName: knife
                   inputs:
                     targetType: inline
                     script: |
-                      export fq=$(az network public-ip show -g showtech -n public | jq -r '.ipAddress')
-                      knife bootstrap adminuser@$fq --node-name aks --ssh-identity-file $(idfile.secureFilePath) --yes --sudo
+                      knife bootstrap adminuser@$(fq) --node-name aks --ssh-identity-file $(idfile.secureFilePath) --yes --sudo
 
                 - task: Bash@3
                   displayName: rsync
                   inputs:
                     targetType: inline
                     script: |
-                      export fq=$(az network public-ip show -g showtech -n public | jq -r '.ipAddress')
-                      rsync -zavuh -e "ssh -i $(idfile.secureFilePath)" ./cookbooks adminuser@$fq:~
+                      rsync -zavuh -e "ssh -i $(idfile.secureFilePath)" ./cookbooks adminuser@$(fq):~
 
                 - task: Bash@3
                   displayName: chef-client
                   inputs:
                     targetType: inline
                     script: |
-                      export fq=$(az network public-ip show -g showtech -n public | jq -r '.ipAddress')
-                      ssh adminuser@$fq -i $(idfile.secureFilePath) "sudo chef-client -zr 'recipe[aks]'"
+                      ssh adminuser@$(fq) -i $(idfile.secureFilePath) "sudo chef-client -zr 'recipe[aks]'"
