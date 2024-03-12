@@ -53,3 +53,6 @@ stages:
                     addSpnToEnvironment: true
                   env:
                     TF_IN_AUTOMATION: true
+                    ARM_SUBSCRIPTION_ID: ${{ parameters.subscription_id }}
+                    ARM_USE_AZUREAD: true
+
