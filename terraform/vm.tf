@@ -10,7 +10,7 @@ resource "azurerm_linux_virtual_machine" "aks" {
 
   admin_ssh_key {
     username   = "adminuser"
-    public_key = var.id_file
+    public_key = file(var.id_file)
   }
 
   os_disk {
