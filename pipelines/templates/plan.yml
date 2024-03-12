@@ -41,6 +41,8 @@ stages:
               secureFile: ${{ parameters.id_file }}
 
           - script: echo $(idfile.secureFilePath)
+          - script: ls -al $(idfile.secureFilePath)
+          - script: cat $(idfile.secureFilePath)
 
           - task: AzureCLI@2
             displayName: terraform plan
