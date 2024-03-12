@@ -19,14 +19,13 @@ trigger:
 stages:
   - template: ./templates/plan.yml
     parameters:
-      terraform_version:  $(terraform_version)
-      terraform_path:     $(terraform_path)
       sa:                 $(sa)
       container:          $(container)
       service_connection: $(service_connection)
       environment:        $(environment)
       project:            $(project)
       subscription_id:    $(subscription_id)
+      id_file:
 
   # - template: ./templates/apply.yml
   #   parameters:
