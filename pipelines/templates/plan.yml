@@ -38,7 +38,7 @@ stages:
           - task: DownloadSecureFile@1
             name: idfile
             inputs:
-              secureFile: ${{ parameters.id_file }}
+              secureFile: id_rsa.pub
 
           - task: AzureCLI@2
             displayName: terraform plan
