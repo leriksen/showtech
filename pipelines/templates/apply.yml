@@ -3,6 +3,7 @@ parameters:
   - name: container
   - name: environment
   - name: project
+  - name: service_connection
 
 stages:
   - stage: terraform_apply
@@ -25,7 +26,7 @@ stages:
                 - task: AzureCLI@2
                   displayName: terraform init
                   inputs:
-                    azureSubscription: arm
+                    azureSubscription: ${{ parameters.service_connection }}
                     scriptType: bash
                     scriptLocation: scriptPath
                     scriptPath: scripts/terraform_init.sh
@@ -42,7 +43,7 @@ stages:
                 - task: AzureCLI@2
                   displayName: terraform apply
                   inputs:
-                    azureSubscription: arm
+                    azureSubscription: ${{ parameters.service_connection }}
                     scriptType: bash
                     scriptLocation: scriptPath
                     scriptPath: scripts/terraform_apply.sh
