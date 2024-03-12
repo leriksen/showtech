@@ -1,3 +1,7 @@
+parameters:
+  - name: environment
+    type: string
+    default: dev
 variables:
   - group: terraform-base
   - group: devops-base
@@ -14,7 +18,12 @@ trigger:
       - master
       - main
   paths:
-    exclude: []
+    exclude:
+      - terraform/**/*
+      - modules/**/*
+      - pipelines/infra_deploy_dev.yml
+      - pipelines/templates/**/*
+      - scripts/**/*
 
 stages:
   - stage: chef

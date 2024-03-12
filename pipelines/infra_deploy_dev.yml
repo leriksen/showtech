@@ -14,7 +14,9 @@ trigger:
       - master
       - main
   paths:
-    exclude: []
+    exclude:
+      - chef/**/*
+      - pipelines/cluster_config.yml
 
 stages:
   - template: ./templates/plan.yml
