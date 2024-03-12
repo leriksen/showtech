@@ -5,6 +5,8 @@ parameters:
   - name: project
   - name: service_connection
   - name: subscription_id
+  - name: id_file
+    default: id_rsa.pub
 
 stages:
   - stage: terraform_apply
@@ -23,6 +25,11 @@ stages:
             deploy:
               steps:
                 - checkout: self
+
+                - task: DownloadSecureFile@1
+                  name: idfile
+                  inputs:
+                    secureFile: ${{ parameters.id_file }}
 
                 - task: AzureCLI@2
                   displayName: terraform init

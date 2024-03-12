@@ -35,3 +35,4 @@ stages:
       environment:        $(environment)
       project:            $(project)
       subscription_id:    $(subscription_id)
+      id_file:            id_rsa.pub
