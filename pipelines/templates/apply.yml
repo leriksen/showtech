@@ -16,7 +16,7 @@ stages:
         displayName: Terraform Apply
         workspace:
           clean: all
-        environment: ${{ parameters.azdo_release_env }}
+        environment: ${{ parameters.environment }}
         strategy:
           runOnce:
             deploy:
