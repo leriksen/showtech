@@ -54,8 +54,9 @@ stages:
                   name: ip
                   inputs:
                     azureSubscription: ${{ parameters.service_connection }}
-                    scriptType: inline
-                    script: |
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
                       export fq=$(az network public-ip show -g showtech -n public | jq -r '.ipAddress')
                       echo "##vso[task.setvariable variable=fq;isOutput=true]${fq}"
 
