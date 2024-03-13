@@ -58,7 +58,10 @@ stages:
                     scriptLocation: inlineScript
                     inlineScript: |
                       export fq=$(az network public-ip show -g showtech -n public | jq -r '.ipAddress')
+                      echo "fq is ${fq}"
                       echo "##vso[task.setvariable variable=fq;isOutput=true]${fq}"
+
+                - script: echo "fq is $fq"
 
                 - task: Bash@3
                   displayName: knife

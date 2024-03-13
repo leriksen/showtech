@@ -2,7 +2,7 @@ resource "azurerm_linux_virtual_machine" "aks" {
   name                = "aks"
   resource_group_name = azurerm_resource_group.showtech.name
   location            = azurerm_resource_group.showtech.location
-  size                = "Standard_F2"
+  size                = "Standard_B2ats_v2"
   admin_username      = "adminuser"
   network_interface_ids = [
     azurerm_network_interface.nic.id,
