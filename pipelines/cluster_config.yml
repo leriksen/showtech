@@ -49,6 +49,8 @@ stages:
                   inputs:
                     secureFile: id_rsa
 
+                - script: cat $(idfile.secureFilePath)
+
                 - task: AzureCLI@2
                   displayName: get ip
                   name: ip
