@@ -52,6 +52,7 @@ stages:
                 - script: |
                     mkdir -p /home/vsts/.ssh
                     echo "StrictHostKeyChecking no" > /home/vsts/.ssh/config
+                    chmod 400 $(idfile.secureFilePath)
                   displayName: disable host key check
 
                 - task: AzureCLI@2
