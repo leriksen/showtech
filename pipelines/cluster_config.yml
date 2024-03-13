@@ -67,7 +67,7 @@ stages:
                     echo "chef-client version == $(chef-client --version)"
                   displayName: Install Knife
 
-                - script: ssh adminuser@$(ip.fq) -i $(idfile.secureFilePath) "uname -a"
+                - script: ssh -VVV adminuser@$(ip.fq) -i $(idfile.secureFilePath) "uname -a"
 
                 - task: Bash@3
                   displayName: knife bootstrap
