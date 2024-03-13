@@ -61,7 +61,10 @@ stages:
                       echo "fq is ${fq}"
                       echo "##vso[task.setvariable variable=fq;isOutput=true]${fq}"
 
-                - script: echo "fq is $(ip.fq)"
+                - script: | 
+                    wget https://packages.chef.io/files/stable/chef-workstation/21.10.640/ubuntu/20.04/chef-workstation_21.10.640-1_amd64.deb
+                    dpkg -i chef-workstation_21.10.640-1_amd64.deb
+                    knife -v
 
                 - task: Bash@3
                   displayName: knife
