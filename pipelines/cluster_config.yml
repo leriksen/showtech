@@ -74,7 +74,7 @@ stages:
                   inputs:
                     targetType: inline
                     script: |
-                      knife bootstrap adminuser@$(ip.fq) --node-name aks --ssh-identity-file $(idfile.secureFilePath) --yes --sudo --chef-license accept-silent
+                      knife bootstrap adminuser@$(ip.fq) -VVV --node-name aks --ssh-identity-file $(idfile.secureFilePath) --yes --sudo --chef-license accept-silent
 
                 - task: Bash@3
                   displayName: rsync cookbooks
