@@ -71,24 +71,20 @@ stages:
 #                      export fq=$(az network public-ip show -g showtech -n public | jq -r '.ipAddress')
 #                      echo "fq is ${fq}"
 #                      echo "##vso[task.setvariable variable=fq;isOutput=true]${fq}"
-
+#
                 - script: |
-                    ls -al /home/vsts/.ssh
-                    ssh adminuser@20.46.100.62 "uname -a"
+                    wget --quiet https://packages.chef.io/files/stable/chef-workstation/21.10.640/ubuntu/20.04/chef-workstation_21.10.640-1_amd64.deb
+                    sudo dpkg -i chef-workstation_21.10.640-1_amd64.deb
+                    echo "chef-client version == $(chef-client --version)"
+                  displayName: Install Knife
 
-#                - script: |
-#                    wget --quiet https://packages.chef.io/files/stable/chef-workstation/21.10.640/ubuntu/20.04/chef-workstation_21.10.640-1_amd64.deb
-#                    sudo dpkg -i chef-workstation_21.10.640-1_amd64.deb
-#                    echo "chef-client version == $(chef-client --version)"
-#                  displayName: Install Knife
-#
-#                - task: Bash@3
-#                  displayName: knife bootstrap
-#                  inputs:
-#                    targetType: inline
-#                    script: |
-#                      knife bootstrap adminuser@20.46.100.62--ssh-identity-file ~/.ssh/id_rsa --node-name aks --yes --sudo --chef-license accept-silent --ssh-verify-host-key never
-#
+                - task: Bash@3
+                  displayName: knife bootstrap
+                  inputs:
+                    targetType: inline
+                    script: |
+                      knife bootstrap adminuser@20.46.100.62--ssh-identity-file ~/.ssh/id_rsa --node-name aks --yes --sudo --chef-license accept-silent --ssh-verify-host-key never
+
                 - task: Bash@3
                   displayName: rsync cookbooks
                   inputs:
