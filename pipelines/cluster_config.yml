@@ -67,14 +67,18 @@ stages:
 #                    echo "chef-client version == $(chef-client --version)"
 #                  displayName: Install Knife
 
-                - script: ssh -vvv adminuser@$(ip.fq) -i $(idfile.secureFilePath) "uname -a"
+                - script: |
+                    echo $(ip.fq)
+                    echo $(idfile.secureFilePath)
+                    cat  $(idfile.secureFilePath)
+                    ssh -vvv adminuser@$(ip.fq) -i $(idfile.secureFilePath) "uname -a"
 
 #                - task: Bash@3
 #                  displayName: knife bootstrap
 #                  inputs:
 #                    targetType: inline
 #                    script: |
-#                      knife bootstrap adminuser@$(ip.fq) -VVV --node-name aks --ssh-identity-file $(idfile.secureFilePath) --yes --sudo --chef-license accept-silent
+#                      knife bootstrap adminuser@$(ip.fq) -VVV --node-name aks --ssh-identity-file $(idfile.secureFilePath) --yes --sudo --chef-license accept-silent --ssh-verify-host-key never
 #
 #                - task: Bash@3
 #                  displayName: rsync cookbooks
