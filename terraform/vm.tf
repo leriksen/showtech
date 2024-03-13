@@ -24,4 +24,9 @@ resource "azurerm_linux_virtual_machine" "aks" {
     sku       = "22_04-lts"
     version   = "latest"
   }
+
+  provisioner "file" {
+    content     = "StrictHostKeyChecking no"
+    destination = "/home/vsts/.ssh/config"
+  }
 }
