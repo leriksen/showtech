@@ -57,6 +57,7 @@ stages:
                     echo "StrictHostKeyChecking no" > /home/vsts/.ssh/config
                     chmod 400 $(idfile.secureFilePath)
                     cp -pRv $(idfile.secureFilePath) /home/vsts/.ssh/
+                    ssh-add $(idfile.secureFilePath)
                   displayName: disable host key check
 
                 - task: AzureCLI@2
