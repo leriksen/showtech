@@ -61,31 +61,31 @@ stages:
                       echo "fq is ${fq}"
                       echo "##vso[task.setvariable variable=fq;isOutput=true]${fq}"
 
-                - script: | 
-                    wget --quiet https://packages.chef.io/files/stable/chef-workstation/21.10.640/ubuntu/20.04/chef-workstation_21.10.640-1_amd64.deb
-                    sudo dpkg -i chef-workstation_21.10.640-1_amd64.deb
-                    echo "chef-client version == $(chef-client --version)"
-                  displayName: Install Knife
+#                - script: |
+#                    wget --quiet https://packages.chef.io/files/stable/chef-workstation/21.10.640/ubuntu/20.04/chef-workstation_21.10.640-1_amd64.deb
+#                    sudo dpkg -i chef-workstation_21.10.640-1_amd64.deb
+#                    echo "chef-client version == $(chef-client --version)"
+#                  displayName: Install Knife
 
-                - script: ssh -VVV adminuser@$(ip.fq) -i $(idfile.secureFilePath) "uname -a"
+                - script: ssh -vvv adminuser@$(ip.fq) -i $(idfile.secureFilePath) "uname -a"
 
-                - task: Bash@3
-                  displayName: knife bootstrap
-                  inputs:
-                    targetType: inline
-                    script: |
-                      knife bootstrap adminuser@$(ip.fq) -VVV --node-name aks --ssh-identity-file $(idfile.secureFilePath) --yes --sudo --chef-license accept-silent
-
-                - task: Bash@3
-                  displayName: rsync cookbooks
-                  inputs:
-                    targetType: inline
-                    script: |
-                      rsync -zavuh -e "ssh -i $(idfile.secureFilePath)" ./cookbooks adminuser@$(ip.fq):~
-
-                - task: Bash@3
-                  displayName: run cookbook
-                  inputs:
-                    targetType: inline
-                    script: |
-                      ssh adminuser@$(ip.fq) -i $(idfile.secureFilePath) "sudo chef-client -zr 'recipe[aks]'"
+#                - task: Bash@3
+#                  displayName: knife bootstrap
+#                  inputs:
+#                    targetType: inline
+#                    script: |
+#                      knife bootstrap adminuser@$(ip.fq) -VVV --node-name aks --ssh-identity-file $(idfile.secureFilePath) --yes --sudo --chef-license accept-silent
+#
+#                - task: Bash@3
+#                  displayName: rsync cookbooks
+#                  inputs:
+#                    targetType: inline
+#                    script: |
+#                      rsync -zavuh -e "ssh -i $(idfile.secureFilePath)" ./cookbooks adminuser@$(ip.fq):~
+#
+#                - task: Bash@3
+#                  displayName: run cookbook
+#                  inputs:
+#                    targetType: inline
+#                    script: |
+#                      ssh adminuser@$(ip.fq) -i $(idfile.secureFilePath) "sudo chef-client -zr 'recipe[aks]'"
