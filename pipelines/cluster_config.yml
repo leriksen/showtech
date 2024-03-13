@@ -94,7 +94,7 @@ stages:
                   inputs:
                     targetType: inline
                     script: |
-                      rsync -zavuh -e "ssh -i ~/.ssh/id_rsa" ./cookbooks adminuser@20.46.100.62:~
+                      rsync -zavuh -e "ssh -i ~/.ssh/id_rsa" ./chef/cookbooks adminuser@20.46.100.62:~
 
                 - task: Bash@3
                   displayName: run cookbook
