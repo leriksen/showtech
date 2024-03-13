@@ -49,8 +49,6 @@ stages:
                   inputs:
                     secureFile: id_rsa
 
-                - script: cat $(idfile.secureFilePath)
-
                 - task: AzureCLI@2
                   displayName: get ip
                   name: ip
@@ -67,23 +65,26 @@ stages:
                     wget --quiet https://packages.chef.io/files/stable/chef-workstation/21.10.640/ubuntu/20.04/chef-workstation_21.10.640-1_amd64.deb
                     sudo dpkg -i chef-workstation_21.10.640-1_amd64.deb
                     echo "chef-client version == $(chef-client --version)"
+                  displayName: Install Knife
+
+                - script: ssh adminuser@$(ip.fq) -i $(idfile.secureFilePath) "uname -a"
 
                 - task: Bash@3
-                  displayName: knife
+                  displayName: knife bootstrap
                   inputs:
                     targetType: inline
                     script: |
                       knife bootstrap adminuser@$(ip.fq) --node-name aks --ssh-identity-file $(idfile.secureFilePath) --yes --sudo --chef-license accept-silent
 
                 - task: Bash@3
-                  displayName: rsync
+                  displayName: rsync cookbooks
                   inputs:
                     targetType: inline
                     script: |
                       rsync -zavuh -e "ssh -i $(idfile.secureFilePath)" ./cookbooks adminuser@$(ip.fq):~
 
                 - task: Bash@3
-                  displayName: chef-client
+                  displayName: run cookbook
                   inputs:
                     targetType: inline
                     script: |

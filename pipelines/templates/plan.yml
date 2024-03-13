@@ -6,7 +6,6 @@ parameters:
   - name: service_connection
   - name: subscription_id
   - name: id_file
-    default: id_rsa.pub
 
 stages:
   - stage: terraform_plan
