@@ -49,11 +49,24 @@ stages:
                   inputs:
                     secureFile: id_rsa
 
+                - task: DownloadSecureFile@1
+                  name: pem
+                  inputs:
+                    secureFile: leriksen.pem
+
+                - task: DownloadSecureFile@1
+                  name: config
+                  inputs:
+                    secureFile: config.rb
+
                 - script: |
                     mkdir -p /home/vsts/.ssh
+                    mkdir -p /home/vsts/.chef
                     echo "StrictHostKeyChecking no" > /home/vsts/.ssh/config
                     chmod 400 $(idfile.secureFilePath)
                     cp -pR $(idfile.secureFilePath) /home/vsts/.ssh/
+                    cp -pR $(pem.secureFilePath) /home/vsts/.chef/
+                    cp -pR $(config.secureFilePath) /home/vsts/.chef/
                   displayName: setup ssh
 
 #                - task: AzureCLI@2
@@ -79,7 +92,7 @@ stages:
                   inputs:
                     targetType: inline
                     script: |
-                      knife bootstrap adminuser@20.46.100.62 --ssh-identity-file ~/.ssh/id_rsa --node-name aks --yes --sudo --chef-license accept-silent --ssh-verify-host-key never
+                      knife bootstrap adminuser@20.46.100.62 -VVV --ssh-identity-file ~/.ssh/id_rsa --node-name aks --yes --sudo --chef-license accept-silent --ssh-verify-host-key never
 
                 - task: Bash@3
                   displayName: rsync cookbooks
