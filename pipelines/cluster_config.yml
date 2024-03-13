@@ -50,6 +50,7 @@ stages:
                     secureFile: id_rsa
 
                 - script: |
+                    mkdir -p /home/vsts/.ssh
                     echo "StrictHostKeyChecking no" > /home/vsts/.ssh/config
                   displayName: disable host key check
 
