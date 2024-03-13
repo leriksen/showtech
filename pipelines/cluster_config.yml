@@ -53,11 +53,7 @@ stages:
                     mkdir -p /home/vsts/.ssh
                     echo "StrictHostKeyChecking no" > /home/vsts/.ssh/config
                     chmod 400 $(idfile.secureFilePath)
-                    cp -pRv $(idfile.secureFilePath) /home/vsts/.ssh/
-                    ls -al /home/vsts/.ssh
-                    whoami
-                    pwd
-                    ls -al
+                    cp -pR $(idfile.secureFilePath) /home/vsts/.ssh/
                   displayName: setup ssh
 
 #                - task: AzureCLI@2
@@ -76,14 +72,14 @@ stages:
                     wget --quiet https://packages.chef.io/files/stable/chef-workstation/21.10.640/ubuntu/20.04/chef-workstation_21.10.640-1_amd64.deb
                     sudo dpkg -i chef-workstation_21.10.640-1_amd64.deb
                     echo "chef-client version == $(chef-client --version)"
-                  displayName: Install Knife
+                  displayName: install knife
 
                 - task: Bash@3
                   displayName: knife bootstrap
                   inputs:
                     targetType: inline
                     script: |
-                      knife bootstrap adminuser@20.46.100.62--ssh-identity-file ~/.ssh/id_rsa --node-name aks --yes --sudo --chef-license accept-silent --ssh-verify-host-key never
+                      knife bootstrap adminuser@20.46.100.62 --ssh-identity-file ~/.ssh/id_rsa --node-name aks --yes --sudo --chef-license accept-silent --ssh-verify-host-key never
 
                 - task: Bash@3
                   displayName: rsync cookbooks
