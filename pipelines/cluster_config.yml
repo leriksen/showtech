@@ -64,16 +64,14 @@ stages:
                 - script: | 
                     wget --quiet https://packages.chef.io/files/stable/chef-workstation/21.10.640/ubuntu/20.04/chef-workstation_21.10.640-1_amd64.deb
                     sudo dpkg -i chef-workstation_21.10.640-1_amd64.deb
-                    chef-client --chef-license accept completion bash
-                    chef-client --version
-                    knife --version
+                    echo "chef-client version == $(chef-client --version)"
 
                 - task: Bash@3
                   displayName: knife
                   inputs:
                     targetType: inline
                     script: |
-                      knife bootstrap adminuser@$(ip.fq) --node-name aks --ssh-identity-file $(idfile.secureFilePath) --yes --sudo
+                      knife bootstrap adminuser@$(ip.fq) --node-name aks --ssh-identity-file $(idfile.secureFilePath) --yes --sudo --chef-license accept-silent
 
                 - task: Bash@3
                   displayName: rsync
