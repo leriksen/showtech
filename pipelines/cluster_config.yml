@@ -56,6 +56,8 @@ stages:
                     cp -pRv $(idfile.secureFilePath) /home/vsts/.ssh/
                     ls -al /home/vsts/.ssh
                     whoami
+                    pwd
+                    ls -al
                   displayName: setup ssh
 
 #                - task: AzureCLI@2
