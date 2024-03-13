@@ -49,6 +49,10 @@ stages:
                   inputs:
                     secureFile: id_rsa
 
+                - script: |
+                    echo "StrictHostKeyChecking no" > /home/vsts/.ssh/config
+                  displayName: disable host key check
+
                 - task: AzureCLI@2
                   displayName: get ip
                   name: ip
