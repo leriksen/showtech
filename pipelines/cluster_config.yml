@@ -67,6 +67,11 @@ stages:
                     cp -pR $(idfile.secureFilePath) /home/vsts/.ssh/
                     cp -pR $(pem.secureFilePath) /home/vsts/.chef/
                     cp -pR $(config.secureFilePath) /home/vsts/.chef/
+                    ls -al /home/vsts/.chef
+                    cat /home/vsts/.chef/*.pem
+                    cat /home/vsts/.chef/config.rb
+                    ssh-agent
+                    ssh-add
                   displayName: setup ssh
 
 #                - task: AzureCLI@2
@@ -92,18 +97,18 @@ stages:
                   inputs:
                     targetType: inline
                     script: |
-                      knife bootstrap adminuser@20.46.100.62 -VVV --ssh-identity-file ~/.ssh/id_rsa --node-name aks --yes --sudo --chef-license accept-silent --ssh-verify-host-key never
+                      knife bootstrap adminuser@13.77.2.63 -VVV --ssh-identity-file ~/.ssh/id_rsa --node-name aks --yes --sudo --chef-license accept-silent --ssh-verify-host-key never
 
-                - task: Bash@3
-                  displayName: rsync cookbooks
-                  inputs:
-                    targetType: inline
-                    script: |
-                      rsync -zavuh -e "ssh -i ~/.ssh/id_rsa" ./chef/cookbooks adminuser@20.46.100.62:~
-
-                - task: Bash@3
-                  displayName: run cookbook
-                  inputs:
-                    targetType: inline
-                    script: |
-                      ssh adminuser@$(ip.fq) -i ~/.ssh/id_rsa "sudo chef-client -zr 'recipe[aks]'"
+#                - task: Bash@3
+#                  displayName: rsync cookbooks
+#                  inputs:
+#                    targetType: inline
+#                    script: |
+#                      rsync -zavuh -e "ssh -i ~/.ssh/id_rsa" ./chef/cookbooks adminuser@13.77.2.63:~
+#
+#                - task: Bash@3
+#                  displayName: run cookbook
+#                  inputs:
+#                    targetType: inline
+#                    script: |
+#                      ssh adminuser@13.77.2.63 -i ~/.ssh/id_rsa "sudo chef-client -zr 'recipe[aks]'"
