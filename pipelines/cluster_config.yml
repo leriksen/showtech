@@ -67,9 +67,7 @@ stages:
                     cp -pR $(idfile.secureFilePath) /home/vsts/.ssh/
                     cp -pR $(pem.secureFilePath) /home/vsts/.chef/
                     cp -pR $(config.secureFilePath) /home/vsts/.chef/
-                    ls -al /home/vsts/.chef
-                    cat /home/vsts/.chef/*.pem
-                    cat /home/vsts/.chef/config.rb
+
                     eval $(ssh-agent -s)
                     ssh-add
                   displayName: setup ssh
@@ -97,7 +95,7 @@ stages:
                   inputs:
                     targetType: inline
                     script: |
-                      knife bootstrap adminuser@13.77.2.63 -VVV --ssh-identity-file ~/.ssh/id_rsa --node-name aks --yes --sudo --chef-license accept-silent --ssh-verify-host-key never
+                      knife bootstrap adminuser@13.77.2.63 --config ~/.chef/config.rb -VVV --ssh-identity-file ~/.ssh/id_rsa --node-name aks --yes --sudo --chef-license accept-silent --ssh-verify-host-key never
 
 #                - task: Bash@3
 #                  displayName: rsync cookbooks
